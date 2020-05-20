@@ -6,8 +6,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -65,6 +67,35 @@ class UserControllerTest {
                 .jsonPath("first_name").isEqualTo("Bilbo")
                 .jsonPath("last_name").isEqualTo("Baggins")
                 .jsonPath("phone").isEqualTo("+44 9999-99999");
+    }
+
+    @Test
+    public void shouldCreateNewUserData_ToTheRepository() {
+        UserData requestUserData = UserData.builder()
+                .firstName("Frodo")
+                .lastName("Baggins")
+                .phone("+44 7777-7777")
+                .build();
+        UserData savedUserData = UserData.builder()
+                .id(11L)
+                .firstName(requestUserData.getFirstName())
+                .lastName(requestUserData.getLastName())
+                .phone(requestUserData.getPhone())
+                .build();
+        Mockito.when(userRepository.save(requestUserData))
+                .thenReturn(Mono.just(savedUserData));
+
+        webClient.post()
+                .uri("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(requestUserData))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("id").isEqualTo("11")
+                .jsonPath("first_name").isEqualTo("Frodo")
+                .jsonPath("last_name").isEqualTo("Baggins")
+                .jsonPath("phone").isEqualTo("+44 7777-7777");
     }
 
     @Test
