@@ -19,7 +19,7 @@ The rest will have the resource:
 Where the endpoints exposed are:
 
 | Method | Endpoint | Description  |
-| ---    |:------- | -----:|
+| ---    |:------- |:-----|
 |GET| /users | Get all the users |
 |POST| /users | Create a new user |
 |GET| /users/{user_id} | Get specific user data |
