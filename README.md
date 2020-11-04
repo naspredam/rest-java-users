@@ -3,9 +3,9 @@
 This project has as objective to have a rest api build on:
 
 - Gradle
-- Java 14
-- Spring boot 2.3.0-RELEASE
-- MySQL (8.0.20)
+- Java 15
+- Spring boot 2.3.5
+- MySQL (8.0.22)
 
 Using reactive strategy with webflux and r2dbc (this example is using sql with mysql on this example).
 
